@@ -9,6 +9,7 @@
 
 AwoolfnichCOMP313Ass1Character::AwoolfnichCOMP313Ass1Character()
 {
+	didAttack = false;
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -16,6 +17,7 @@ AwoolfnichCOMP313Ass1Character::AwoolfnichCOMP313Ass1Character()
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationRoll = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	// Create a camera boom attached to the root (capsule)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -68,8 +70,14 @@ void AwoolfnichCOMP313Ass1Character::MoveRight(float Value)
 
 
 void AwoolfnichCOMP313Ass1Character::JumpAttack() {
-	if (GetCharacterMovement()->IsFalling()) {
-		LaunchCharacter(FVector(0.f, GetActorForwardVector().Y * 2000.f, 0.f), false, false);
+	if (GetCharacterMovement()->IsFalling() && !this->didAttack) {
+		if (GetActorForwardVector().Y < 0.f) {
+			LaunchCharacter(FVector(0.f, -2000.f, 0.f), true, false);
+		}
+		else {
+			LaunchCharacter(FVector(0.f, 2000.f, 0.f), true, false);
+		}
+		this->didAttack = true;
 	}
 }
 
@@ -84,3 +92,9 @@ void AwoolfnichCOMP313Ass1Character::TouchStopped(const ETouchIndex::Type Finger
 	StopJumping();
 }
 
+void AwoolfnichCOMP313Ass1Character::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+	if (!GetCharacterMovement()->IsFalling() && this->didAttack) {
+		this->didAttack = false;
+	}
+}

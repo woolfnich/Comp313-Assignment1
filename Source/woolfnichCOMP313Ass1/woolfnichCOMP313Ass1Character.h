@@ -21,6 +21,8 @@ class AwoolfnichCOMP313Ass1Character : public ACharacter
 
 protected:
 
+	bool didAttack;
+
 	/** Called for side to side input */
 	void MoveRight(float Val);
 
@@ -39,6 +41,7 @@ protected:
 
 public:
 	AwoolfnichCOMP313Ass1Character();
+	virtual void Tick(float DeltaSeconds) override;
 
 	/** Returns SideViewCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetSideViewCameraComponent() const { return SideViewCameraComponent; }
