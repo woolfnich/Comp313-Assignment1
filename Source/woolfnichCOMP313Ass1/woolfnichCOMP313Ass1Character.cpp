@@ -53,6 +53,7 @@ void AwoolfnichCOMP313Ass1Character::SetupPlayerInputComponent(class UInputCompo
 	// set up gameplay key bindings
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &AwoolfnichCOMP313Ass1Character::JumpAttack);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AwoolfnichCOMP313Ass1Character::MoveRight);
 
 	PlayerInputComponent->BindTouch(IE_Pressed, this, &AwoolfnichCOMP313Ass1Character::TouchStarted);
@@ -63,6 +64,13 @@ void AwoolfnichCOMP313Ass1Character::MoveRight(float Value)
 {
 	// add movement in that direction
 	AddMovementInput(FVector(0.f,-1.f,0.f), Value);
+}
+
+
+void AwoolfnichCOMP313Ass1Character::JumpAttack() {
+	if (GetCharacterMovement()->IsFalling()) {
+		LaunchCharacter(FVector(0.f, GetActorForwardVector().Y * 2000.f, 0.f), false, false);
+	}
 }
 
 void AwoolfnichCOMP313Ass1Character::TouchStarted(const ETouchIndex::Type FingerIndex, const FVector Location)
